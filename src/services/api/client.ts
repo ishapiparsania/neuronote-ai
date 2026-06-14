@@ -29,6 +29,22 @@ export function createApiError(error: unknown): ApiError {
     return { code: 'UNKNOWN', message: error.message };
   }
 
+  if (typeof error === 'string') {
+    return { code: 'UNKNOWN', message: error };
+  }
+
+  if (
+    error &&
+    typeof error === 'object' &&
+    'message' in error &&
+    typeof (error as { message?: unknown }).message === 'string'
+  ) {
+    return {
+      code: 'UNKNOWN',
+      message: (error as { message: string }).message,
+    };
+  }
+
   return { code: 'UNKNOWN', message: 'An unexpected error occurred' };
 }
 

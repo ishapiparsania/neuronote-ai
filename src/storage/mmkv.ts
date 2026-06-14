@@ -1,8 +1,8 @@
-import { MMKV } from 'react-native-mmkv';
+import { createMMKV } from 'react-native-mmkv';
 import { Note } from '@/types/note';
 import { STORAGE_KEYS } from './keys';
 
-export const storage = new MMKV({ id: 'neuronote-storage' });
+export const storage = createMMKV({ id: 'neuronote-storage' });
 
 export type StoredSettings = {
   openaiApiKey: string;

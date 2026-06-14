@@ -40,8 +40,18 @@ export class OpenAIService {
         },
       );
 
-      const raw = response.data.choices[0]?.message?.content ?? '{}';
-      const parsed = JSON.parse(raw) as Partial<SummaryResult>;
+      const raw = response.data.choices[0]?.message?.content;
+      if (!raw) {
+        throw new Error('OpenAI returned an empty summary response.');
+      }
+
+      let parsed: Partial<SummaryResult>;
+      try {
+        parsed = JSON.parse(raw) as Partial<SummaryResult>;
+      } catch {
+        throw new Error('OpenAI returned invalid summary JSON.');
+      }
+
       return {
         summary: parsed.summary ?? 'No summary available.',
         actionItems: Array.isArray(parsed.actionItems)

@@ -3,12 +3,12 @@ import ReactTestRenderer from 'react-test-renderer';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { NoteCard } from '@/features/notes/components/NoteCard';
-import { ThemeProvider } from '@/theme/ThemeProvider';
+import { ThemeProvider } from '@/theme';
 import notesReducer from '@/store/notesSlice';
 import settingsReducer from '@/store/settingsSlice';
 
 jest.mock('react-native-mmkv', () => ({
-  MMKV: jest.fn().mockImplementation(() => ({
+  createMMKV: jest.fn().mockImplementation(() => ({
     getString: jest.fn(),
     set: jest.fn(),
   })),

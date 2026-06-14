@@ -8,7 +8,7 @@ import { store, AppDispatch } from '@/store';
 import { hydrateNotes } from '@/store/notesSlice';
 import { hydrateSettings } from '@/store/settingsSlice';
 import { loadNotes, loadSettings } from '@/storage/mmkv';
-import { ThemeProvider, useAppTheme } from '@/theme/ThemeProvider';
+import { ThemeProvider, useAppTheme } from '@/theme';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { RootNavigator } from '@/navigation/RootNavigator';
 
@@ -18,8 +18,8 @@ function AppBootstrap() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    // dispatch(hydrateNotes(loadNotes()));
-    // dispatch(hydrateSettings(loadSettings()));
+    dispatch(hydrateNotes(loadNotes()));
+    dispatch(hydrateSettings(loadSettings()));
     setReady(true);
   }, [dispatch]);
 
