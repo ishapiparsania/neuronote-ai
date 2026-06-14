@@ -1,97 +1,153 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# NeuroNote AI
 
-# Getting Started
+An offline-first AI note-taking app built with **React Native New Architecture**. Save notes locally, then use AI to summarize, organize, and extract action items — or chat with your notes as context.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Elevator Pitch
 
-## Step 1: Start Metro
+NeuroNote AI lets you capture thoughts offline and instantly ask AI to summarize meetings, pull out action items, or answer questions across all your notes.
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Features
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- **Notes CRUD** — Create, edit, delete, and search notes stored locally with MMKV
+- **AI Summarize** — Extract summaries and action items from any note via OpenAI
+- **Chat With Notes** — Ask questions like "What tasks are pending?" using all notes as context
+- **Dark Mode** — System, light, or dark appearance override
+- **Offline-first** — Notes work without network; AI features require connectivity + API key
 
-```sh
-# Using npm
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Framework | React Native 0.86+ (New Architecture) |
+| Language | TypeScript |
+| State | Redux Toolkit |
+| Storage | MMKV |
+| AI | OpenAI API (gpt-4o-mini) |
+| Forms | React Hook Form + Zod |
+| Navigation | React Navigation (bottom tabs + native stack) |
+| Styling | StyleSheet + design tokens |
+| HTTP | Axios with typed error handling |
+
+## Architecture
+
+```mermaid
+flowchart TB
+  subgraph app [App Layer]
+    App[App.tsx]
+    EB[ErrorBoundary]
+    Nav[RootNavigator]
+  end
+
+  subgraph features [Features]
+    Notes[notes]
+    AI[ai]
+    Settings[settings]
+  end
+
+  subgraph core [Core]
+    Store[Redux Toolkit]
+    MMKV[MMKV Storage]
+    Theme[ThemeProvider]
+    API[Axios Client]
+    OpenAI[OpenAI Service]
+  end
+
+  App --> EB --> Nav
+  Nav --> Notes
+  Nav --> AI
+  Nav --> Settings
+  Notes --> Store
+  AI --> Store
+  Settings --> Store
+  Store --> MMKV
+  AI --> OpenAI
+  OpenAI --> API
+```
+
+## Project Structure
+
+```
+src/
+├── app/              App entry + bootstrap
+├── navigation/       Tab + stack navigators
+├── components/     ErrorBoundary + shared UI
+├── theme/            Colors, spacing, typography
+├── store/            Redux slices
+├── services/
+│   ├── api/          Axios client + typed errors
+│   └── ai/           OpenAI service + prompts
+├── storage/          MMKV persistence
+├── hooks/            useNotes, useAI, useSettings
+├── types/            Shared TypeScript types
+├── utils/            Date formatting, ID generation
+└── features/
+    ├── notes/        Notes list + editor
+    ├── ai/           Summarize + chat screens
+    └── settings/     API key + appearance
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js >= 22.11
+- Xcode (iOS) / Android Studio (Android)
+- OpenAI API key
+
+### Install
+
+```bash
+npm install
+cd ios && pod install && cd ..
+```
+
+### Run
+
+```bash
+# Start Metro
 npm start
 
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
+# iOS
 npm run ios
 
-# OR using Yarn
-yarn ios
+# Android
+npm run android
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+### Configure OpenAI
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+1. Open the app → **Settings** tab
+2. Paste your OpenAI API key (`sk-…`)
+3. Tap **Save API Key**
 
-## Step 3: Modify your app
+Your key is stored **locally on device only** via MMKV — never committed to git.
 
-Now that you have successfully run the app, let's make changes!
+## Usage
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+1. **Create notes** on the Notes tab (+ FAB button)
+2. **Search** notes with the search bar
+3. **Summarize** — AI tab → select a note → Summarize
+4. **Chat** — AI tab → "Chat with all notes" → ask questions
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+## Testing
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+```bash
+npm test
+npm run lint
+```
 
-## Congratulations! :tada:
+## Screenshots
 
-You've successfully run and modified your React Native App. :partying_face:
+> Add screenshots to `docs/screenshots/` after running the app.
 
-### Now what?
+| Screen | Description |
+|--------|-------------|
+| Notes List | Card-based note list with search |
+| Note Editor | Create/edit with form validation |
+| AI Summarize | Summary + action items |
+| Chat | Conversational Q&A over notes |
+| Settings | API key + dark mode |
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+## License
 
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+Private — portfolio / interview project.
