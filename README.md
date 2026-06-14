@@ -106,6 +106,10 @@ cd android && ./gradlew assembleDebug
 
 The debug APK is generated and Available under GitHub Releases
 
+## Screenshots
+
+docs/screenshots
+
 ## Notes
 
 - Gemini requests require a valid API key from Google AI Studio.
