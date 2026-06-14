@@ -104,7 +104,11 @@ npm run lint
 cd android && ./gradlew assembleDebug
 ```
 
-The debug APK is generated at `android/app/build/outputs/apk/debug/app-debug.apk`.
+The debug APK is generated and Available under GitHub Releases
+
+## Screenshots
+
+docs/screenshots
 
 ## Notes
 
