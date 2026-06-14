@@ -1,6 +1,6 @@
 # NeuroNote AI
 
-An offline-first AI note-taking app built with **React Native New Architecture**. Save notes locally, then use AI to summarize, organize, and extract action items — or chat with your notes as context.
+An offline-first AI note-taking app built with **React Native New Architecture**. Save notes locally, then use Gemini to summarize, organize, and extract action items — or chat with your notes as context.
 
 ## Elevator Pitch
 
@@ -9,7 +9,7 @@ NeuroNote AI lets you capture thoughts offline and instantly ask AI to summarize
 ## Features
 
 - **Notes CRUD** — Create, edit, delete, and search notes stored locally with MMKV
-- **AI Summarize** — Extract summaries and action items from any note via OpenAI
+- **AI Summarize** — Extract summaries and action items from any note via Gemini
 - **Chat With Notes** — Ask questions like "What tasks are pending?" using all notes as context
 - **Dark Mode** — System, light, or dark appearance override
 - **Offline-first** — Notes work without network; AI features require connectivity + API key
@@ -22,7 +22,7 @@ NeuroNote AI lets you capture thoughts offline and instantly ask AI to summarize
 | Language | TypeScript |
 | State | Redux Toolkit |
 | Storage | MMKV |
-| AI | OpenAI API (gpt-4o-mini) |
+| AI | Gemini API (`gemini-3.5-flash`) |
 | Forms | React Hook Form + Zod |
 | Navigation | React Navigation (bottom tabs + native stack) |
 | Styling | StyleSheet + design tokens |
@@ -49,7 +49,7 @@ flowchart TB
     MMKV[MMKV Storage]
     Theme[ThemeProvider]
     API[Axios Client]
-    OpenAI[OpenAI Service]
+    Gemini[Gemini Service]
   end
 
   App --> EB --> Nav
@@ -60,8 +60,8 @@ flowchart TB
   AI --> Store
   Settings --> Store
   Store --> MMKV
-  AI --> OpenAI
-  OpenAI --> API
+  AI --> Gemini
+  Gemini --> API
 ```
 
 ## Project Structure
@@ -75,7 +75,7 @@ src/
 ├── store/            Redux slices
 ├── services/
 │   ├── api/          Axios client + typed errors
-│   └── ai/           OpenAI service + prompts
+│   └── ai/           Gemini service + prompts
 ├── storage/          MMKV persistence
 ├── hooks/            useNotes, useAI, useSettings
 ├── types/            Shared TypeScript types
@@ -92,7 +92,7 @@ src/
 
 - Node.js >= 22.11
 - Xcode (iOS) / Android Studio (Android)
-- OpenAI API key
+- Gemini API key from Google AI Studio
 
 ### Install
 
@@ -114,10 +114,10 @@ npm run ios
 npm run android
 ```
 
-### Configure OpenAI
+### Configure Gemini
 
 1. Open the app → **Settings** tab
-2. Paste your OpenAI API key (`sk-…`)
+2. Paste your Gemini API key (`AIza…`)
 3. Tap **Save API Key**
 
 Your key is stored **locally on device only** via MMKV — never committed to git.
@@ -136,6 +136,14 @@ npm test
 npm run lint
 ```
 
+## Build
+
+```bash
+cd android && ./gradlew assembleDebug
+```
+
+The debug APK is generated at `android/app/build/outputs/apk/debug/app-debug.apk`.
+
 ## Screenshots
 
 > Add screenshots to `docs/screenshots/` after running the app.
@@ -147,6 +155,22 @@ npm run lint
 | AI Summarize | Summary + action items |
 | Chat | Conversational Q&A over notes |
 | Settings | API key + dark mode |
+
+## Recent Improvements
+
+- Fixed Metro alias resolution so `@/` imports work reliably in Android builds.
+- Switched the AI layer from OpenAI to Gemini to avoid quota/rate-limit issues in the current flow.
+- Repaired MMKV initialization so local storage loads correctly at app startup.
+- Tightened AI error handling so malformed responses surface clearer messages instead of generic failures.
+- Updated the Settings and AI screens to reflect the Gemini-based workflow.
+
+## Performance Notes
+
+The project did not add a new benchmark suite, so there is no formal before/after latency report. The main practical improvement is better responsiveness and fewer failed AI actions:
+
+- Fewer runtime crashes from bad module resolution and storage initialization.
+- More successful AI requests because Gemini is used instead of the rate-limited OpenAI path.
+- Clearer failure messages reduce retry churn and make the app easier to use under API errors.
 
 ## License
 
