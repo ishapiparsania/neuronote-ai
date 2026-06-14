@@ -47,11 +47,11 @@ export function SettingsScreen() {
               typography.subtitle,
               { color: colors.textPrimary, marginBottom: spacing.md },
             ]}>
-            OpenAI API Key
+            Gemini API Key
           </Text>
           <Input
             label="API Key"
-            placeholder="sk-…"
+            placeholder="AIza…"
             value={apiKeyInput}
             onChangeText={setApiKeyInput}
             secureTextEntry

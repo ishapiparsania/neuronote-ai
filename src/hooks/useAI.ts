@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
-import { OpenAIService } from '@/services/ai/openai';
+import { GeminiService } from '@/services/ai/gemini';
 import { SummaryResult, ChatMessage } from '@/types/ai';
 import { ApiError } from '@/types/api';
 import { createApiError } from '@/services/api/client';
@@ -18,7 +18,7 @@ export function useAI() {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
 
   const service = useMemo(
-    () => new OpenAIService(() => apiKey),
+    () => new GeminiService(() => apiKey),
     [apiKey],
   );
 
@@ -29,7 +29,7 @@ export function useAI() {
       if (!hasApiKey) {
         setError({
           code: 'NO_API_KEY',
-          message: 'Add your OpenAI API key in Settings',
+          message: 'Add your Gemini API key in Settings',
         });
         return;
       }
@@ -52,7 +52,7 @@ export function useAI() {
       if (!hasApiKey) {
         setError({
           code: 'NO_API_KEY',
-          message: 'Add your OpenAI API key in Settings',
+          message: 'Add your Gemini API key in Settings',
         });
         return;
       }

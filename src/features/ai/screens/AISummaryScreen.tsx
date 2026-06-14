@@ -46,7 +46,7 @@ export function AISummaryScreen() {
         <EmptyState
           icon="🔑"
           title="API Key Required"
-          subtitle="Add your OpenAI API key in Settings to use AI features"
+          subtitle="Add your Gemini API key in Settings to use AI features"
           actionLabel="Go to Settings"
           onAction={() => navigation.navigate('SettingsTab' as never)}
         />

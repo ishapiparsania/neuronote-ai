@@ -97,7 +97,7 @@ export function ChatScreen() {
         <EmptyState
           icon="🔑"
           title="API Key Required"
-          subtitle="Add your OpenAI API key in Settings to chat with your notes"
+          subtitle="Add your Gemini API key in Settings to chat with your notes"
           actionLabel="Go to Settings"
           onAction={() => navigation.navigate('SettingsTab' as never)}
         />
